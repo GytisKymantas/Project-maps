@@ -52,7 +52,6 @@ const CitiesList: React.FC<Props> = React.memo(
 
     const filteredCities = React.useMemo(() => {
       const trimmedQuery = searchQuery;
-      console.log(trimmedQuery, 'trimmed');
       if (isFavoritesSwitched && trimmedQuery) {
         return favoriteCities?.filter(({ city }) =>
           city.toLowerCase().startsWith(trimmedQuery)
@@ -74,7 +73,9 @@ const CitiesList: React.FC<Props> = React.memo(
         size='large'
         itemLayout='horizontal'
         bordered={false}
-        dataSource={filteredCities}
+        dataSource={cities?.filter(({ city }) =>
+          city.toLowerCase().startsWith(searchQuery)
+        )}
         loading={loading}
         renderItem={({ lat, lng, id, city, isFavorite, population }) => {
           const color = getColor(parseInt(population));

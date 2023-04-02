@@ -18,7 +18,7 @@ const MainCard: React.FC<Props> = () => {
 
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value !== '') {
-      return setSearchQuery(() => e.target.value.trim());
+      return setSearchQuery(() => e.target.value.toLowerCase().trim());
     }
     return setSearchQuery('');
   };
