@@ -9,7 +9,7 @@ import SwitchToggle from './SwitchToggle';
 type Props = {};
 
 const MainCard: React.FC<Props> = () => {
-  const [isFavorites, setIsFavorites] = useState(false);
+  const [isFavoritesToggled, setIsFavoritesToggled] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const mapRef = useRef<Map>(null);
   const flyToCity = ({ lat, lng }: { lat: string; lng: string }) => {
@@ -29,14 +29,14 @@ const MainCard: React.FC<Props> = () => {
             onChange={(e) => handleSearch(e)}
             style={{ width: 200 }}
           />
-          <SwitchToggle setIsFavorites={setIsFavorites} />
+          <SwitchToggle setIsFavorites={setIsFavoritesToggled} />
         </Space>
       }
     >
       <Row>
         <S.StyledCol span={8}>
           <CitiesList
-            isFavorite={isFavorites}
+            isFavoriteToggled={isFavoritesToggled}
             searchQuery={searchQuery}
             flyToCity={flyToCity}
           />

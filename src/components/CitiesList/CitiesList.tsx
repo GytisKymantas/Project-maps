@@ -1,28 +1,20 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Button, List, Space, Tooltip, Typography } from 'antd';
-import {
-  useCreateFavoriteCityMutation,
-  useDeleteFavoriteCityMutation,
-  useGetAllCitiesQuery,
-  useGetFavoriteCitiesIdsQuery,
-} from '../../api';
-import { HeartOutlined, HeartFilled, TeamOutlined } from '@ant-design/icons';
-import * as S from './CitiesList.styled';
+import React from 'react';
+import { List } from 'antd';
+import { useGetAllCitiesQuery, useGetFavoriteCitiesIdsQuery } from '../../api';
+import ListItem from './ListItem';
 
 type Props = {
   flyToCity: (payload: { lat: string; lng: string }) => void;
-  isFavorite?: boolean;
+  isFavoriteToggled?: boolean;
   searchQuery?: any;
 };
 
 const CitiesList: React.FC<Props> = React.memo(
-  ({ flyToCity, isFavorite, searchQuery }) => {
+  ({ flyToCity, isFavoriteToggled, searchQuery }) => {
     const { data: citiesResponse, isFetching } = useGetAllCitiesQuery();
     const { data: favoriteResponse, isFetching: isFavoriteFetching } =
       useGetFavoriteCitiesIdsQuery();
-    const [createFavoriteCity] = useCreateFavoriteCityMutation();
-    const [deleteFavoriteCity] = useDeleteFavoriteCityMutation();
-    console.log(searchQuery, 'earch');
+    console.log('rerendered cities list');
     const favoriteIds = React.useMemo(() => {
       return favoriteResponse?.map(({ id }) => id) || [];
     }, [favoriteResponse]);
@@ -53,20 +45,20 @@ const CitiesList: React.FC<Props> = React.memo(
 
     const filteredCities = React.useMemo(() => {
       const trimmedQuery = searchQuery;
-      if (isFavorite && trimmedQuery) {
+      if (isFavoriteToggled && trimmedQuery) {
         return favoriteCities?.filter(({ city }) =>
           city.toLowerCase().startsWith(trimmedQuery)
         );
       }
 
-      if (!isFavorite && trimmedQuery) {
+      if (!isFavoriteToggled && trimmedQuery) {
         return cities?.filter(({ city }) =>
           city.toLowerCase().startsWith(trimmedQuery)
         );
       }
 
-      return isFavorite ? favoriteCities : cities;
-    }, [cities, favoriteCities, isFavorite, searchQuery]);
+      return isFavoriteToggled ? favoriteCities : cities;
+    }, [cities, favoriteCities, isFavoriteToggled, searchQuery]);
 
     const loading = isFetching || isFavoriteFetching;
     return (
@@ -76,39 +68,18 @@ const CitiesList: React.FC<Props> = React.memo(
         bordered={false}
         dataSource={filteredCities}
         loading={loading}
-        renderItem={({ lat, lng, id, city, isFavorite, population }) => {
+        renderItem={({ lat, lng, id, city, population, isFavorite }) => {
           const color = getColor(parseInt(population));
-
           return (
-            <List.Item
-              key={id}
-              onClick={() => flyToCity({ lat, lng })}
-              actions={[
-                <Tooltip
-                  key='favorites'
-                  title={
-                    isFavorite ? 'Remove from favorites' : 'Add to favorites'
-                  }
-                >
-                  <Button
-                    type='text'
-                    icon={isFavorite ? <HeartFilled /> : <HeartOutlined />}
-                    onClick={() => {
-                      isFavorite
-                        ? deleteFavoriteCity(id)
-                        : createFavoriteCity(id);
-                    }}
-                  />
-                </Tooltip>,
-              ]}
-            >
-              <Space size='large'>
-                <S.CityAvatar color={color} icon={<TeamOutlined />} />
-                <Typography.Text strong style={{ margin: 0 }}>
-                  {city}
-                </Typography.Text>
-              </Space>
-            </List.Item>
+            <ListItem
+              color={color}
+              flyToCity={flyToCity}
+              lat={lat}
+              lng={lng}
+              id={id}
+              city={city}
+              isFavorite={isFavorite}
+            />
           );
         }}
       />
