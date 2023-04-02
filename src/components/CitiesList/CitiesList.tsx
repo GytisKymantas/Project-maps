@@ -11,12 +11,12 @@ import * as S from './CitiesList.styled';
 
 type Props = {
   flyToCity: (payload: { lat: string; lng: string }) => void;
-  isFavoritesSwitched?: boolean;
+  isFavorite?: boolean;
   searchQuery?: any;
 };
 
 const CitiesList: React.FC<Props> = React.memo(
-  ({ flyToCity, isFavoritesSwitched, searchQuery }) => {
+  ({ flyToCity, isFavorite, searchQuery }) => {
     const { data: citiesResponse, isFetching } = useGetAllCitiesQuery();
     const { data: favoriteResponse, isFetching: isFavoriteFetching } =
       useGetFavoriteCitiesIdsQuery();
@@ -52,20 +52,20 @@ const CitiesList: React.FC<Props> = React.memo(
 
     const filteredCities = React.useMemo(() => {
       const trimmedQuery = searchQuery;
-      if (isFavoritesSwitched && trimmedQuery) {
+      if (isFavorite && trimmedQuery) {
         return favoriteCities?.filter(({ city }) =>
           city.toLowerCase().startsWith(trimmedQuery)
         );
       }
 
-      if (!isFavoritesSwitched && trimmedQuery) {
+      if (!isFavorite && trimmedQuery) {
         return cities?.filter(({ city }) =>
           city.toLowerCase().startsWith(trimmedQuery)
         );
       }
 
-      return isFavoritesSwitched ? favoriteCities : cities;
-    }, [cities, favoriteCities, isFavoritesSwitched, searchQuery]);
+      return isFavorite ? favoriteCities : cities;
+    }, [cities, favoriteCities, isFavorite, searchQuery]);
 
     const loading = isFetching || isFavoriteFetching;
     return (
@@ -105,8 +105,6 @@ const CitiesList: React.FC<Props> = React.memo(
             >
               <Space size='large'>
                 <S.CityAvatar color={color} icon={<TeamOutlined />} />
-                {/* <p>{parseInt(population)}</p>
-              later remove */}
                 <Typography.Text strong style={{ margin: 0 }}>
                   {city}
                 </Typography.Text>

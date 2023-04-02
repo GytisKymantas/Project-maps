@@ -45,7 +45,7 @@ const MainCard: React.FC<Props> = () => {
       <Row>
         <S.StyledCol span={8}>
           <CitiesList
-            isFavoritesSwitched={isFavorites}
+            isFavorite={isFavorites}
             searchQuery={searchQuery}
             flyToCity={flyToCity}
           />
