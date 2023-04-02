@@ -22,6 +22,7 @@ const CitiesList: React.FC<Props> = React.memo(
       useGetFavoriteCitiesIdsQuery();
     const [createFavoriteCity] = useCreateFavoriteCityMutation();
     const [deleteFavoriteCity] = useDeleteFavoriteCityMutation();
+    console.log(searchQuery, 'earch');
     const favoriteIds = React.useMemo(() => {
       return favoriteResponse?.map(({ id }) => id) || [];
     }, [favoriteResponse]);
@@ -73,9 +74,7 @@ const CitiesList: React.FC<Props> = React.memo(
         size='large'
         itemLayout='horizontal'
         bordered={false}
-        dataSource={cities?.filter(({ city }) =>
-          city.toLowerCase().startsWith(searchQuery)
-        )}
+        dataSource={filteredCities}
         loading={loading}
         renderItem={({ lat, lng, id, city, isFavorite, population }) => {
           const color = getColor(parseInt(population));
