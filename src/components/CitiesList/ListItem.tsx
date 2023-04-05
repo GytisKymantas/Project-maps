@@ -28,8 +28,6 @@ const ListItem: React.FC<ListItemProps> = ({
 }) => {
   const [createFavoriteCity] = useCreateFavoriteCityMutation();
   const [deleteFavoriteCity] = useDeleteFavoriteCityMutation();
-  console.log('one');
-
   return (
     <List.Item
       key={id}

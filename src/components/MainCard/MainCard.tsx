@@ -12,6 +12,7 @@ const MainCard: React.FC<Props> = () => {
   const [isFavoritesToggled, setIsFavoritesToggled] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const mapRef = useRef<Map>(null);
+  // useCallback with ref as dependency
   const flyToCity = ({ lat, lng }: { lat: string; lng: string }) => {
     mapRef.current?.flyTo([Number(lat), Number(lng)], 12);
   };

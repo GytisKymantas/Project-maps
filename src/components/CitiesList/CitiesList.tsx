@@ -14,11 +14,10 @@ const CitiesList: React.FC<Props> = React.memo(
     const { data: citiesResponse, isFetching } = useGetAllCitiesQuery();
     const { data: favoriteResponse, isFetching: isFavoriteFetching } =
       useGetFavoriteCitiesIdsQuery();
-    console.log('rerendered cities list');
+
     const favoriteIds = React.useMemo(() => {
       return favoriteResponse?.map(({ id }) => id) || [];
     }, [favoriteResponse]);
-
     const cities = React.useMemo(
       () =>
         citiesResponse?.map((city) => ({
@@ -87,4 +86,4 @@ const CitiesList: React.FC<Props> = React.memo(
   }
 );
 
-export default CitiesList;
+export default React.memo(CitiesList);

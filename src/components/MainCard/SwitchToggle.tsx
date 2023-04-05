@@ -5,7 +5,6 @@ interface SwitchProps {
   setIsFavorites: (value: boolean) => void;
 }
 const SwitchToggle: React.FC<SwitchProps> = ({ setIsFavorites }) => {
-  console.log('rendered swictch');
   return (
     <>
       <Space align='center'>
